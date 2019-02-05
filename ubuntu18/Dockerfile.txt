@@ -1,0 +1,59 @@
+#Build Centos EDGE image
+FROM ubuntu:18.04
+MAINTAINER chienchi@lanl.gov
+
+ENV EDGE_VER 2.4.0
+ENV container docker
+ENV EDGE_BUILD "20181120"
+ENV EDGE_HOME "/home/edge/edge"
+ENV HTTPS_PROXY ""
+ENV HTTP_RPOXY ""
+ENV https_proxy ""
+ENV http_proxy ""
+
+LABEL version="${EDGE_VER}"
+LABEL software="EDGE"
+LABEL description="Enabling the democratization of the genomics revolution with a fully integrated web-based bioinformatics platform."
+LABEL website="https://lanl-bioinformatics.github.io/EDGE/"
+LABEL tags="bioinformatics"
+LABEL release-date="${EDGE_BUILD}"
+
+# Tell systemd we're running in Docker!
+
+ENV container docker
+
+# Copy our initial build scripts
+
+COPY EDGE_build_ubuntu18.sh /tmp/
+
+# Initial configuration and extraction
+#
+# OK - we could use the Docker scripting language, but the shell script does everything in one hit.
+#
+
+RUN bash -c "chmod 755 /tmp/EDGE_build_ubuntu18.sh; if ! /tmp/EDGE_build_ubuntu18.sh; then exit 1; fi; rm -f /tmp/EDGE_build_ubuntu18.sh"
+
+# SystemCtl stop signal
+
+STOPSIGNAL SIGRTMIN+3
+
+# Update version and build date
+RUN sed -i -e "s/>build.*</>build ${EDGE_BUILD}</"	\
+           -e "s/style=\"display:none\" id=\"docker/id=\"docker/" \
+           -e "s/EDGE-UI.*/EDGE-UI v${EDGE_VER}/" $EDGE_HOME/edge_ui/index.html
+
+# Entry Point and Ports
+
+EXPOSE 80 8080 3306
+
+# workdir
+
+WORKDIR /home/edge
+
+# Systemd needs this VG
+
+VOLUME ["/sys/fs/cgroup"]
+
+# Run Init by default - this starts systemd for us
+
+CMD ["/start.sh"]

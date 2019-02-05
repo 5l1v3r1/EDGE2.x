@@ -1,0 +1,201 @@
+[project]
+##number of cpu
+cpu=4
+##store output to [outpath]/[projname] 
+outpath=
+projname=testPoreEDGE
+projdesc=lambda genome
+projid=
+projcode=
+projowner=
+projrunhost=
+
+[Download Fastq]
+DoFastqDownload=auto
+
+[Download SRA]
+DoSRADownload=0
+## SRA accessions ByrRun, ByExp, BySample, ByStudy 
+SRA_id=SRX674271
+
+[Count Fastq]
+DoCountFastq=auto
+fastq_source=not
+
+[Quality Trim and Filter]
+## boolean, 1=yes, 0=no
+DoQC=1
+## phred encoding offset,  0 for autocheck
+qc_phred_offset=0
+##Targets quality level for trimming
+q=5
+##Trimmed sequence length will have at least minimum length 
+min_L=50
+##Average quality cutoff
+avg_q=0
+##"N" base cutoff.  Trimmed read has more than this number of continuous base "N" will be discarded. 
+n=1
+##Low complexity filter ratio, Maximum fraction of mono-/di-nucleotide sequence
+lc=0.85
+## Trim reads with adapters or contamination sequences
+adapter=/PATH/adapter.fasta
+## phiX filter, boolean, 1=yes, 0=no
+phiX=0
+## Cut # bp from 5 end before quality trimming/filtering 
+5end=0
+## Cut # bp from 3 end before quality trimming/filtering 
+3end=0
+
+[Host Removal]
+## boolean, 1=yes, 0=no
+DoHostRemoval=1
+## Use more Host=  to remove multiple host reads
+Host=/PATH/all_chromosome.fasta
+similarity=90
+
+[Assembly]
+## boolean, 1=yes, 0=no
+DoAssembly=1
+#Bypass assembly and use pre-assembled contigs
+assembledContigs=
+inputContigs=
+minContigSize=200
+## spades or idba_ud or megahit or lrasm
+assembler=idba_ud
+idbaOptions="--pre_correction  --mink 31"
+## for spades
+## support algorithm: default, singlecell,metagenome,plasmid,rna
+SpadesAlgorithm=default
+SpadesPacbioFile=
+SpadesNanoporeFile=
+## for megahit
+megahit_preset=meta
+## for lrasm
+lrasm_num_consensus=3
+lrasm_preset=ont
+lrasm_ec=1
+
+[Reads Mapping To Contigs]
+# Reads mapping to contigs
+DoReadsMappingContigs=auto
+## support bowtie or bwa
+edge-r2c-aligner=bowtie
+edge-r2c-aligner-options=
+
+[Reads Mapping To Reference]
+# Reads mapping to reference
+DoReadsMappingReference=
+## support bowtie or bwa
+edge-r2g-aligner=bowtie
+edge-r2g-aligner-options=
+# reference genbank or fasta file
+reference=
+MapUnmappedReads=0
+r2g_extract_mapped=0
+r2g_extract_unmapped=0
+r2g_get_consensus=0
+r2g_consensus_min_mapQ=10
+r2g_consensus_max_cov=300
+r2g_consensus_alt_prop=0.5
+r2g_consensus_min_cov=5
+r2g_consensus_min_baseQ=20
+r2g_variant_call=1
+
+[Reads Taxonomy Classification]
+## boolean, 1=yes, 0=no
+DoReadsTaxonomy=1
+## If reference genome exists, only use unmapped reads to do Taxonomy Classification. Turn on AllReads=1 will use all reads instead.
+AllReads=0
+enabledTools=gottcha-genDB-b,gottcha-speDB-b,gottcha-strDB-b,gottcha-genDB-v,gottcha-speDB-v,gottcha-strDB-v,metaphlan2,bwa,kraken,diamond
+splitrim-minq=20
+custom-gottcha-genDB-b=
+custom-gottcha-speDB-b=
+custom-gottcha-strDB-b=
+custom-gottcha-genDB-v=
+custom-gottcha-speDB-v=
+custom-gottcha-strDB-v=
+custom-gottcha2-speDB-b=
+custom-gottcha2-genDB-v=
+custom-gottcha2-speDB-v=
+custom-bwa-db=
+custom-metaphlan-db=
+custom-kraken-db=
+custom-pangia-db=
+custom-diamond-db=
+
+[Contigs Mapping To Reference]
+# Contig mapping to reference
+DoContigMapping=auto
+## identity cutoff
+identity=85
+MapUnmappedContigs=0
+
+[Variant Analysis]
+DoVariantAnalysis=auto
+
+[Contigs Taxonomy Classification]
+DoContigsTaxonomy=1
+
+[Contigs Annotation]
+## boolean, 1=yes, 0=no
+DoAnnotation=1
+# kingdom: Archaea Bacteria Mitochondria Viruses
+kingdom=Bacteria
+contig_size_cut_for_annotation=700
+## support tools: Prokka or RATT
+annotateProgram=Prokka
+annotateSourceGBK=
+DoKeggOmicsView=
+
+[Contigs Binning]
+DoBinning=0
+contig_size_cut_for_binning=1000
+binning-max-itr=50
+binning-prob=0.9
+binning-markerset=107
+binning-abund-file=
+
+[ProPhage Detection]
+DoProPhageDetection=1
+
+[Phylogenetic Analysis]
+DoSNPtree=1
+## Availabe choices are Ecoli, Yersinia, Francisella, Brucella, Bacillus
+SNPdbName=Ecoli
+## List of genome name from NCBI genomes see $EDGE/edge_ui/data/Ref_list.json
+SNPGenomes=
+SNPGenomesFiles=
+## A refrence genoem from above two options for reads/contigs mapping
+SNPrefGenome=
+## FastTree or RAxML
+treeMaker=FastTree
+## SRA accessions ByrRun, ByExp, BySample, ByStudy
+SNP_SRA_ids=
+
+[Primer Validation]
+DoPrimerValidation=1
+maxMismatch=1
+# primer fasta file
+primer=
+
+[Primer Adjudication]
+## boolean, 1=yes, 0=no
+DoPrimerDesign=0
+## desired primer tm
+tm_opt=59
+tm_min=57
+tm_max=63
+## desired primer length
+len_opt=18
+len_min=20
+len_max=27
+## reject primer having Tm < tm_diff difference with background Tm
+tm_diff=5
+## display # top results for each target
+top=5
+
+[Generate JBrowse Tracks]
+DoJBrowse=1
+
+[HTML Report]
+DoHTMLReport=1

@@ -1,0 +1,53 @@
+1. Install apache2 
+
+    For Ubuntu
+    > sudo apt-get install apache2
+
+    For CentOS
+    > sudo yum -y install httpd
+
+2. Enable apache cgid, proxy  modules
+
+    For Ubuntu
+    > sudo a2enmod cgid
+    > sudo a2enmod proxy proxy_http
+
+3. Modify sample apache/httpd configuration file: 
+
+    For Ubuntu
+    > vim $EDGE_HOME/edge_ui/apache_conf/edge_apache.conf
+    Make sure lines 2,3,13,14,26,51 have the appropriate path
+
+    For CentOS
+    > vim $EDGE_HOME/edge_ui/apache_conf/edge_httpd.conf
+    Make sure lines 2,3,11,12,26,51 have the appropriate path
+
+4. Copy edge_apache.conf to the apache or Insert content into httpd.conf
+
+    For Ubuntu
+    > cp $EDGE_HOME/edge_ui/apache_conf/edge_apache.conf /etc/apache2/conf-available/
+    > ln -s /etc/apache2/conf-available/edge_apache.conf /etc/apache2/conf-enabled/
+    For CentOS
+    > sudo cp $EDGE_HOME/edge_ui/apache_conf/edge_httpd.conf /etc/httpd/conf.d/
+
+
+4. Modify configuration file:  
+    
+    For Ubuntu
+    mod permissions on installed directory to match apache user (ex: change from www-data to edge)
+
+    For CentOS
+    > sudo vim /etc/httpd/conf/httpd.conf
+    Modify lines as follows:
+    66 modify line: User edge
+    67 modify line: Group edge
+    95 modify line: ServerName localhost
+    247 comment out line: ScriptAlias /cgi-bin/ "/var/www/cgi-bin/" 
+    294 uncomment line: AddHandler cgi-script .cgi
+
+5. Restart the apache2 to active the new configuration
+
+    For Ubuntu
+    > service apache2 restart
+    For CentOS
+    > sudo httpd -k restart
